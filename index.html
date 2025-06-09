@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EchoWhisper - Your Voice. Your Companion. Your Echo.</title>
+    <!-- Importing Poppins font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Importing Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Base Styles */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a2e; /* Dark purple background */
+            color: #f0f0f0; /* Light text color */
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        h1, h2, h3 {
+            color: #f0f0f0;
+            line-height: 1.2;
+        }
+
+        p {
+            color: #cccccc;
+        }
+
+        section {
+            padding: 80px 5%;
+        }
+
+        /* Animation base for scroll-triggered elements */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Specific Animation Types */
+        .scale-in {
+            transform: scale(0.8);
+        }
+        .scale-in.is-visible {
+            transform: scale(1);
+        }
+
+        /* Staggered Animations for Grid Cards */
+        .audience-card, .reward-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .audience-grid.is-visible .audience-card:nth-child(1),
+        .reward-grid.is-visible .reward-card:nth-child(1) { transition-delay: 0s; }
+        .audience-grid.is-visible .audience-card:nth-child(2),
+        .reward-grid.is-visible .reward-card:nth-child(2) { transition-delay: 0.1s; }
+        .audience-grid.is-visible .audience-card:nth-child(3),
+        .reward-grid.is-visible .reward-card:nth-child(3) { transition-delay: 0.2s; }
+        .audience-grid.is-visible .audience-card:nth-child(4),
+        .reward-grid.is-visible .reward-card:nth-child(4) { transition-delay: 0.3s; }
+        .audience-grid.is-visible .audience-card:nth-child(5) { transition-delay: 0.4s; }
+        
+        .audience-card.is-visible,
+        .reward-card.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Reusable Button Styles */
+        .cta-button {
+            background-color: #9c73ff;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background-color: #8a63e6;
+            transform: translateY(-2px);
+        }
+
+        .cta-outline-button {
+            background: none;
+            color: #9c73ff;
+            padding: 10px 25px;
+            border: 2px solid #9c73ff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-outline-button:hover {
+            background-color: #9c73ff;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: #24243b;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #9c73ff;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #f0f0f0;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #9c73ff;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: #f0f0f0;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .icon-button:hover {
+            color: #9c73ff;
+        }
+
+        /* Hero Section Styles */
+        .hero-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 80px 5% 40px;
+            gap: 50px;
+            flex-wrap: wrap;
+            min-height: calc(100vh - 80px);
+            background: radial-gradient(circle at top left, #2f2f51, #1a1a2e);
+        }
+
+        .hero-content-left {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-content-left h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            background: linear-gradient(to right, #9c73ff, #6a4bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content-left p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .hero-cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hero-content-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20px;
+            min-width: 300px;
+        }
+
+        /* Interactive Chat Interface */
+        .interactive-chat-container {
+            background-color: #2b2b4a;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 50px rgba(156, 115, 255, 0.3);
+            width: 100%;
+            max-width: 450px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar { width: 8px; }
+        .chat-messages::-webkit-scrollbar-track { background: #3a3a5f; border-radius: 10px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #6a4bff; border-radius: 10px; }
+        .chat-messages::-webkit-scrollbar-thumb:hover { background: #9c73ff; }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input-area input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border-radius: 25px;
+            border: 1px solid #4a4a6b;
+            background-color: #1a1a2e;
+            color: #f0f0f0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input-area input:focus { border-color: #9c73ff; }
+
+        .chat-input-area button {
+            background-color: #9c73ff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.2em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .chat-input-area button:hover { background-color: #8a63e6; transform: scale(1.05); }
+        .chat-input-area button:disabled { background-color: #5f5f7a; cursor: not-allowed; }
+
+        .chat-bubble {
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            font-size: 0.95em;
+            animation: fadeInBubble 0.5s ease-out forwards;
+            position: relative;
+        }
+
+        .user-message-bubble {
+            background-color: #7a52e0;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .ai-message-bubble {
+            background-color: #4a4a6b;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-bubble .loading-dots {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        .loading-dot:nth-child(1) { animation-delay: 0s; }
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes fadeInBubble {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        /* Generic Section Styles */
+        .about-section, .core-features-section, .reward-section { background-color: #2b2b4a; text-align: center; }
+        .whos-this-for-section, .wellbeing-hub-section { background-color: #1a1a2e; text-align: center; }
+
+        .about-section h2, .whos-this-for-section h2, .core-features-section h2, .wellbeing-hub-section h2, .reward-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #9c73ff, #6a4bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .whos-this-for-section h2, .core-features-section h2, .wellbeing-hub-section h2 { margin-bottom: 50px; }
+        .about-section p, .reward-section p { max-width: 800px; margin: 0 auto 40px; font-size: 1.1em; }
+
+        /* Who's This For Section */
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .audience-card {
+            background-color: #24243b;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: left;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .audience-card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 30px rgba(156, 115, 255, 0.2); }
+        .audience-card h3 { font-size: 1.4em; margin-bottom: 15px; color: #9c73ff; display: flex; align-items: center; }
+        .audience-card h3 i { margin-right: 10px; font-size: 1.3em; }
+        .audience-card p { font-size: 0.95em; color: #ccc; }
+
+        /* Core Features & Wellbeing Hub Item Layout */
+        .feature-item, .wellbeing-feature-item {
+            background-color: #24243b;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .feature-item:nth-child(odd), .wellbeing-feature-item:nth-child(odd) { flex-direction: row; }
+        .feature-item:nth-child(even), .wellbeing-feature-item:nth-child(even) { flex-direction: row-reverse; }
+
+        .feature-content { flex: 1; max-width: 600px; }
+        .feature-content h3 { font-size: 2em; margin-bottom: 15px; color: #9c73ff; }
+        .feature-content p { font-size: 1.05em; margin-bottom: 20px; }
+
+        .feature-demo {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            background-color: #1a1a2e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            position: relative;
+            flex-direction: column;
+        }
+
+        /* Voice-to-Voice Demo */
+        .voice-to-voice-demo { height: 450px; padding: 0; }
+
+        /* AI Personality Modes Demo */
+        .personality-modes-demo { gap: 20px; }
+        .personality-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; }
+        .personality-card {
+            background-color: #3a3a5f; border: 2px solid transparent; border-radius: 10px;
+            padding: 20px; cursor: pointer; transition: all 0.3s ease;
+            width: 150px; text-align: center; font-size: 0.9em; color: #ccc;
+        }
+        .personality-card i { font-size: 2.5em; color: #9c73ff; margin-bottom: 10px; }
+        .personality-card.active { border-color: #9c73ff; background-color: #4a4a6b; box-shadow: 0 0 15px rgba(156, 115, 255, 0.4); color: white; }
+        .personality-card:hover:not(.active) { background-color: #4a4a6b; transform: translateY(-5px); }
+        #selectedPersonalityInfo { font-size: 0.9em; color: #9c73ff; }
+
+        /* Mood Detection Demo */
+        .mood-detection-demo { gap: 20px; }
+        .mood-detection-demo textarea {
+            width: 90%; max-width: 400px; height: 100px; padding: 15px; border-radius: 10px;
+            border: 1px solid #4a4a6b; background-color: #1a1a2e; color: #f0f0f0;
+            font-family: 'Poppins', sans-serif; font-size: 1em; resize: vertical;
+        }
+        .mood-display { font-size: 1.2em; font-weight: 600; color: #9c73ff; display: flex; align-items: center; gap: 10px; min-height: 30px; }
+        .mood-emoji { font-size: 1.5em; }
+
+        /* Digital Twin Demo */
+        .digital-twin-demo { gap: 20px; }
+        .digital-twin-demo img { max-width: 150px; border-radius: 50%; border: 5px solid #9c73ff; box-shadow: 0 0 20px rgba(156, 115, 255, 0.5); margin-bottom: 20px; }
+        .digital-twin-setup { display: flex; flex-direction: column; gap: 15px; width: 90%; max-width: 400px; }
+        .digital-twin-setup textarea { width: 100%; height: 80px; padding: 10px; border-radius: 10px; border: 1px solid #4a4a6b; background-color: #1a1a2e; color: #f0f0f0; font-family: 'Poppins', sans-serif; font-size: 0.95em; resize: vertical; }
+        .digital-twin-response-area {
+            background-color: #2b2b4a; padding: 15px; border-radius: 10px; width: 90%; max-width: 350px;
+            text-align: center; word-wrap: break-word; font-size: 0.95em; min-height: 50px;
+            display: flex; align-items: center; justify-content: center; color: #9c73ff;
+            opacity: 0; transition: opacity 0.5s ease-in-out; margin-top: 20px;
+        }
+
+        /* Daily Reflection Hub */
+        .reflection-content { gap: 30px; width: 100%; }
+        .reflection-input-area { width: 100%; display: flex; flex-direction: column; gap: 15px; }
+        .reflection-input-area textarea { width: calc(100% - 30px); height: 120px; padding: 15px; border-radius: 10px; border: 1px solid #4a4a6b; background-color: #1a1a2e; color: #f0f0f0; font-family: 'Poppins', sans-serif; font-size: 1em; resize: vertical; }
+        .reflection-entries { width: 100%; max-height: 300px; overflow-y: auto; padding-right: 10px; text-align: left; }
+        .reflection-entry { background-color: #3a3a5f; border-radius: 10px; padding: 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); animation: fadeInBubble 0.5s ease-out forwards; }
+        .reflection-entry .entry-date { font-size: 0.85em; color: #9c73ff; margin-bottom: 5px; }
+        .reflection-entry .entry-text { font-size: 0.95em; color: #ccc; }
+
+        /* My Growth Journey */
+        .growth-journey-content { gap: 30px; width: 100%; }
+        .growth-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 40px; }
+        .stat-card { background-color: #1a1a2e; border-radius: 15px; padding: 25px 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); min-width: 200px; text-align: center; }
+        .stat-card .value { font-size: 2.5em; font-weight: 700; color: #9c73ff; margin-bottom: 5px; }
+        .stat-card .label { font-size: 0.9em; color: #ccc; }
+        .mood-trend-chart {
+            background-color: #1a1a2e; border-radius: 15px; padding: 30px; max-width: 800px;
+            margin: 0 auto; box-shadow: 0 5px 20px rgba(0,0,0,0.4); height: 250px;
+            display: flex; flex-direction: column; justify-content: space-between; overflow-x: auto; position: relative;
+        }
+        .mood-trend-chart::before { content: 'Mood Trend (Last 7 Days)'; position: absolute; top: 15px; left: 20px; font-size: 0.9em; color: #ccc; font-weight: 600; }
+        .chart-labels { display: flex; justify-content: space-around; padding-top: 20px; font-size: 0.8em; color: #999; }
+        .chart-bars { display: flex; align-items: flex-end; gap: 10px; height: 150px; flex-grow: 1; padding-bottom: 10px; }
+        .chart-bar-container { flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; min-width: 40px; }
+        .chart-bar { width: 80%; background-color: #6a4bff; border-radius: 5px 5px 0 0; position: relative; height: 0; transition: height 0.8s ease-out; }
+        .chart-bar .mood-icon { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 1.2em; }
+
+        /* Personalized Daily Echo */
+        .daily-echo-content { gap: 30px; width: 100%; }
+        .echo-box {
+            background-color: #1a1a2e; border-radius: 15px; padding: 30px; max-width: 700px;
+            margin: 0 auto 30px; box-shadow: 0 0 10px rgba(0,0,0,0.3); min-height: 100px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.1em; font-style: italic; color: #9c73ff; text-align: center;
+        }
+        .echo-box .loading-dots { display: flex; align-items: center; justify-content: center; }
+
+        /* Reward System Section */
+        .reward-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .reward-card { background-color: #24243b; border-radius: 15px; padding: 30px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .reward-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 25px rgba(156, 115, 255, 0.15); }
+        .reward-card i { font-size: 3em; color: #6a4bff; margin-bottom: 15px; }
+        .reward-card h3 { font-size: 1.3em; margin-bottom: 10px; color: #9c73ff; }
+        .reward-card p { font-size: 0.9em; }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #24243b; padding: 40px 5%; text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.9em; color: #ccc;
+        }
+        .footer .social-links a { color: #f0f0f0; margin: 0 15px; font-size: 1.5em; transition: color 0.3s ease; }
+        .footer .social-links a:hover { color: #9c73ff; }
+        .footer p { margin-top: 20px; margin-bottom: 0; }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-section { flex-direction: column; text-align: center; padding-top: 50px; }
+            .hero-content-left { max-width: 90%; margin-bottom: 40px; }
+            .hero-content-left h1 { font-size: 2.8em; }
+            .hero-cta-buttons { justify-content: center; }
+            .header { flex-direction: column; gap: 15px; }
+            .nav-links { gap: 10px; }
+            .nav-links a { margin: 5px 10px; }
+            .header-actions { margin-top: 10px; }
+            .feature-item, .wellbeing-feature-item { flex-direction: column !important; }
+            .feature-content, .feature-demo { width: 100%; max-width: none; }
+            .reflection-content, .growth-journey-content, .daily-echo-content { padding: 30px; width: 100%; }
+            .growth-stats { flex-direction: column; gap: 20px; }
+            .stat-card { width: 80%; }
+            .mood-trend-chart { height: 200px; padding: 20px; }
+            .chart-labels { padding-top: 10px; }
+            .chart-bars { height: 100px; }
+        }
+        @media (max-width: 768px) {
+            section { padding: 60px 3%; }
+            .header { padding: 10px 3%; }
+            .hero-section { padding: 30px 3% 20px; }
+            .hero-content-left h1 { font-size: 2.2em; }
+            .hero-content-left p { font-size: 1em; }
+            .cta-button, .cta-outline-button { padding: 8px 20px; font-size: 0.9em; }
+            .interactive-chat-container, .voice-to-voice-demo { padding: 15px; height: 400px; }
+            .chat-bubble { padding: 10px 15px; font-size: 0.9em; }
+            .about-section h2, .whos-this-for-section h2, .core-features-section h2, .wellbeing-hub-section h2, .reward-section h2 { font-size: 2em; }
+            .about-section p, .reward-section p, .reflection-content p { font-size: 1em; }
+            .audience-grid, .reward-grid { grid-template-columns: 1fr; }
+            .feature-content h3 { font-size: 1.5em; }
+            .feature-content p { font-size: 0.95em; }
+        }
+        @media (max-width: 480px) {
+            .logo { font-size: 1.3em; }
+            .nav-links { flex-direction: column; align-items: center; }
+            .nav-links a { margin: 5px 0; }
+            .header-actions { flex-direction: column; gap: 10px; }
+            .cta-button, .cta-outline-button { width: 100%; }
+            .hero-section { padding-top: 20px; }
+            .hero-content-left h1 { font-size: 1.8em; }
+            .hero-content-left p { font-size: 0.9em; }
+            .hero-cta-buttons { flex-direction: column; gap: 10px; }
+            .personality-card { width: 100%; }
+            .digital-twin-demo img { max-width: 120px; }
+            .stat-card { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-headphones-alt"></i> EchoWhisper
+        </div>
+        <nav class="nav-links">
+            <a href="#about">About</a>
+            <a href="#whos-this-for">For You</a>
+            <a href="#core-features">Features</a>
+            <a href="#wellbeing-hub">My Hub</a>
+            <a href="#rewards">Rewards</a>
+            <a href="#support">Support</a>
+        </nav>
+        <div class="header-actions">
+            <button class="icon-button"><i class="fas fa-sun"></i></button>
+            <a href="#core-features" class="cta-outline-button">Learn More</a>
+            <a href="#voice-to-voice-feature" class="cta-button">Talk to Echo</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section" id="home">
+            <div class="hero-content-left animate-on-scroll">
+                <h1>Your Voice. Your Companion. Your Echo.</h1>
+                <p>EchoWhisper is an emotional AI built to listen, understand, and respond like a friend — helping you grow with every conversation, without judgment.</p>
+                <div class="hero-cta-buttons">
+                    <a href="#voice-to-voice-feature" class="cta-button">Talk to Echo</a>
+                    <a href="#core-features" class="cta-outline-button">Discover Features</a>
+                </div>
+            </div>
+            <div class="hero-content-right animate-on-scroll scale-in">
+                <div class="interactive-chat-container">
+                    <div class="chat-messages" id="mainChatMessages">
+                        <div class="chat-bubble ai-message-bubble">
+                            Hi there! I'm Echo. How can I support you today?
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="mainChatInput" placeholder="Type your message..." aria-label="Chat input">
+                        <button id="mainChatSendButton" aria-label="Send message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section" id="about">
+            <h2 class="animate-on-scroll">The Heart of EchoWhisper</h2>
+            <p class="animate-on-scroll">In a world that often feels loud and overwhelming, finding a truly safe space to express yourself can be a challenge. EchoWhisper is designed to be that sanctuary. It's more than just an AI; it's a supportive companion that listens, understands your emotions from your voice, and responds with a personalized voice in real-time. Think of it as a friend who's always there, always ready to lend an ear, and always growing with you.</p>
+            <p class="animate-on-scroll">Over time, you can train EchoWhisper to become a digital reflection of yourself, built from your past thoughts and tone. Imagine having a conversation with a version of you—your own voice, your own mindset—reflected back, offering unique insights and a profound sense of self-connection.</p>
+        </section>
+
+        <section class="whos-this-for-section" id="whos-this-for">
+            <h2 class="animate-on-scroll">Who EchoWhisper Is For: Your Story, Our Support</h2>
+            <div class="audience-grid animate-on-scroll">
+                <div class="audience-card"><h3><i class="fas fa-user-friends"></i> The Socially Anxious</h3><p>For those who find social interactions daunting or feel like outcasts, EchoWhisper provides a low-pressure environment to practice expressing thoughts and feelings, building confidence at your own pace.</p></div>
+                <div class="audience-card"><h3><i class="fas fa-feather-alt"></i> The Quiet Introverts</h3><p>If you struggle to open up, even to close friends, EchoWhisper offers a private, non-judgmental space where your voice can be heard without the fear of interruption or misunderstanding.</p></div>
+                <div class="audience-card"><h3><i class="fas fa-cloud"></i> Those Facing Isolation</h3><p>Going through mental health challenges or periods of isolation can be incredibly tough. EchoWhisper acts as a consistent, empathetic presence, offering a connection when you need it most.</p></div>
+                <div class="audience-card"><h3><i class="fas fa-comment-dots"></i> The Seekers of an Outlet</h3><p>Everyone needs a space to vent, reflect, or just talk without fear of being judged. EchoWhisper is that confidential outlet, allowing you to process emotions freely and openly.</p></div>
+                <div class="audience-card"><h3><i class="fas fa-graduation-cap"></i> Students Seeking Motivation</h3><p>Whether it's exam stress or just needing a boost, students who feel average or below average can find a mentor in EchoWhisper, providing personalized motivation and a listening ear for their academic and personal journey.</p></div>
+            </div>
+        </section>
+
+        <section class="core-features-section" id="core-features">
+            <h2 class="animate-on-scroll">Explore EchoWhisper's Core Capabilities</h2>
+
+            <div class="feature-item animate-on-scroll" id="voice-to-voice-feature">
+                <div class="feature-content">
+                    <h3>Voice-to-Text Conversation (Simulated)</h3>
+                    <p>Experience natural, real-time conversations. While direct microphone input isn't supported in this browser environment, you can type your thoughts, and EchoWhisper will process them as if spoken, responding with a clear, personalized voice. It's like talking to a real person, but with the added benefit of endless patience and understanding.</p>
+                </div>
+                <div class="feature-demo voice-to-voice-demo interactive-chat-container">
+                    <div class="chat-messages" id="featureChatMessages">
+                        <div class="chat-bubble ai-message-bubble">Try asking me anything! I'm here to listen.</div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="featureChatInput" placeholder="Type your message..." aria-label="Feature chat input">
+                        <button id="featureChatSendButton" aria-label="Send feature message"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-item animate-on-scroll">
+                <div class="feature-content">
+                    <h3>Choose Your AI Personality</h3>
+                    <p>Tailor your experience by selecting the AI personality that best suits your needs. Whether you need a boost of confidence, a calm presence, or empathetic guidance, EchoWhisper has a voice and demeanor just for you. Switch between male and female voices for each mode.</p>
+                </div>
+                <div class="feature-demo personality-modes-demo">
+                    <div class="personality-options">
+                        <div class="personality-card active" data-personality="Motivator"><i class="fas fa-rocket"></i><h4>Motivator</h4></div>
+                        <div class="personality-card" data-personality="Chill Companion"><i class="fas fa-coffee"></i><h4>Chill Companion</h4></div>
+                        <div class="personality-card" data-personality="Supportive Friend"><i class="fas fa-hand-holding-heart"></i><h4>Supportive Friend</h4></div>
+                        <div class="personality-card" data-personality="Chill Guru"><i class="fas fa-brain"></i><h4>Chill Guru</h4></div>
+                    </div>
+                    <p id="selectedPersonalityInfo">Currently selected: Motivator</p>
+                </div>
+            </div>
+
+            <div class="feature-item animate-on-scroll">
+                <div class="feature-content">
+                    <h3>Mood Detection & Adaptive Responses</h3>
+                    <p>EchoWhisper goes beyond words, detecting subtle cues in your voice tone to understand your emotional state — whether you're feeling sad, happy, or anxious. It then intelligently adjusts its responses to match your mood, providing truly empathetic and relevant support.</p>
+                </div>
+                <div class="feature-demo mood-detection-demo">
+                    <textarea id="moodInput" placeholder="Type how you're feeling..."></textarea>
+                    <div class="mood-display">Detected Mood: <span id="currentMood">Neutral</span> <span id="moodEmoji"></span></div>
+                </div>
+            </div>
+
+            <div class="feature-item animate-on-scroll">
+                <div class="feature-content">
+                    <h3>Digital Twin Mode: Talk to Yourself</h3>
+                    <p>Unlock the truly revolutionary "Digital Twin" mode. As EchoWhisper learns from your past conversations, tone, and mindset, it can create a voice clone and personality profile of yourself. Imagine having a conversation with your own future self, reflecting on growth, or your past self, gaining perspective on challenges you've overcome. It's a profound journey of self-discovery.</p>
+                </div>
+                <div class="feature-demo digital-twin-demo">
+                    <img src="https://placehold.co/150x150/4a4a6b/9c73ff?text=Your+Digital+Twin" alt="Digital Twin Placeholder">
+                    <div class="digital-twin-setup">
+                        <textarea id="twinPersonaInput" placeholder="Describe your 'past self' or 'future self' here (e.g., 'A college student struggling with imposter syndrome', 'A confident version of me who has achieved their goals')."></textarea>
+                        <button id="activateTwinButton" class="cta-button">Activate Twin</button>
+                    </div>
+                    <div class="digital-twin-response-area" id="twinResponseArea">Describe your twin and activate to begin this unique conversation...</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="wellbeing-hub-section" id="wellbeing-hub">
+            <h2 class="animate-on-scroll">Your Personal Well-being Hub</h2>
+            <p class="animate-on-scroll">Dive deeper into self-discovery and track your emotional journey with EchoWhisper's dedicated tools designed for your long-term growth.</p>
+            <div class="wellbeing-feature-item animate-on-scroll">
+                <div class="feature-content"><h3>Daily Reflection Hub: Document Your Journey</h3><p>A quiet space to reflect on your day, jot down thoughts, or track your emotional landscape. EchoWhisper helps you build a personal journal of your inner world.</p></div>
+                <div class="feature-demo reflection-content">
+                    <div class="reflection-input-area">
+                        <textarea id="reflectionInput" placeholder="What's on your mind today?"></textarea>
+                        <button id="saveReflectionButton" class="cta-button">Save Reflection</button>
+                    </div>
+                    <h3>Past Reflections:</h3>
+                    <div class="reflection-entries" id="reflectionEntries"><p style="color: #999;">No reflections saved yet. Start by writing something above!</p></div>
+                </div>
+            </div>
+            <div class="wellbeing-feature-item animate-on-scroll">
+                <div class="feature-content"><h3>My Growth Journey: Visualize Your Progress</h3><p>See how you've grown and evolved with EchoWhisper. Track your engagement and emotional trends over time, gaining insights into your emotional well-being.</p></div>
+                <div class="feature-demo growth-journey-content">
+                    <div class="growth-stats">
+                        <div class="stat-card animate-on-scroll scale-in"><div class="value" id="totalInteractions">0</div><div class="label">Total Interactions</div></div>
+                        <div class="stat-card animate-on-scroll scale-in" style="transition-delay: 0.1s;"><div class="value" id="daysActive">0</div><div class="label">Days Active</div></div>
+                    </div>
+                    <div class="mood-trend-chart animate-on-scroll" id="moodTrendChart">
+                        <div class="chart-bars" id="chartBars"></div><div class="chart-labels" id="chartLabels"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="wellbeing-feature-item animate-on-scroll">
+                <div class="feature-content"><h3>Your Personalized Daily Echo</h3><p>Start your day with a thoughtful affirmation or a question designed just for you, tailored by EchoWhisper to your personality and current mood. A fresh perspective, every day.</p></div>
+                <div class="feature-demo daily-echo-content">
+                    <div class="echo-box" id="echoBox">Click "Get My Daily Echo" to receive your personalized message.</div>
+                    <button id="getDailyEchoButton" class="cta-button">Get My Daily Echo</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="reward-section" id="rewards">
+            <h2 class="animate-on-scroll">Growth, Rewarded: The EchoWhisper Journey</h2>
+            <p class="animate-on-scroll">Every conversation, every moment of self-expression, is a step towards greater emotional resilience. While our reward system is evolving, imagine gaining badges for consistent engagement, unlocking new AI voice options for reaching milestones, or earning 'reflection points' that summarize your personal growth journey over time. These small acknowledgements celebrate your commitment to well-being and self-discovery.</p>
+            <div class="reward-grid animate-on-scroll">
+                <div class="reward-card"><i class="fas fa-trophy"></i><h3>Milestone Badges</h3><p>Earn unique badges for consistent use and achieving personal goals.</p></div>
+                <div class="reward-card"><i class="fas fa-volume-up"></i><h3>Unlock New Voices</h3><p>Discover and unlock exclusive AI voice options as you progress.</p></div>
+                <div class="reward-card"><i class="fas fa-lightbulb"></i><h3>Insightful Summaries</h3><p>Receive personalized reports on your emotional growth and communication patterns.</p></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="support">
+        <div class="social-links animate-on-scroll">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p class="animate-on-scroll">&copy; 2024 EchoWhisper. All rights reserved. <br> Connecting voices, fostering resilience.</p>
+    </footer>
+
+    <script>
+        // --- Global State Variables ---
+        let selectedPersonality = "Motivator";
+        let detectedMood = "Neutral";
+        let digitalTwinPersona = "";
+        let isTwinActive = false;
+
+        // --- Data Persistence (simulated with localStorage) ---
+        let dailyReflections = JSON.parse(localStorage.getItem('echoReflections')) || [];
+        let moodHistory = JSON.parse(localStorage.getItem('echoMoodHistory')) || [];
+        let totalInteractionsCount = parseInt(localStorage.getItem('echoInteractionsCount')) || 0;
+        let daysActiveCount = parseInt(localStorage.getItem('echoDaysActive')) || 0;
+        let lastActiveDate = localStorage.getItem('echoLastActiveDate') || '';
+
+        // --- Gemini API Configuration ---
+        const apiKey = ""; // Provided at runtime by the environment
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+        // --- Utility Functions ---
+        function scrollToBottom(chatMessagesContainer) {
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        }
+
+        function addMessage(text, sender, chatMessagesContainer) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-bubble', sender === 'user' ? 'user-message-bubble' : 'ai-message-bubble');
+            messageDiv.textContent = text;
+            chatMessagesContainer.appendChild(messageDiv);
+            scrollToBottom(chatMessagesContainer);
+            return messageDiv;
+        }
+
+        // NEW: Shows an immediate "typing..." indicator.
+        function addLoadingBubble(chatMessagesContainer) {
+            const loadingBubble = document.createElement('div');
+            loadingBubble.classList.add('chat-bubble', 'ai-message-bubble', 'loading-bubble');
+            loadingBubble.innerHTML = `<div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>`;
+            chatMessagesContainer.appendChild(loadingBubble);
+            scrollToBottom(chatMessagesContainer);
+            return loadingBubble;
+        }
+
+        // NEW: Removes the "typing..." indicator.
+        function removeLoadingBubble(loadingBubble) {
+            if (loadingBubble && loadingBubble.parentNode) {
+                loadingBubble.parentNode.removeChild(loadingBubble);
+            }
+        }
+
+        function addDirectLoading(element) {
+            element.innerHTML = `<div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>`;
+        }
+        
+        // --- Core API Function ---
+        async function sendMessageToGemini(message, chatMessagesContainer, isDigitalTwin = false) {
+            addMessage(message, 'user', chatMessagesContainer); // Display user's message
+            const loadingBubble = addLoadingBubble(chatMessagesContainer); // Instantly show loading indicator
+
+            // Increment interaction stats
+            totalInteractionsCount++;
+            localStorage.setItem('echoInteractionsCount', totalInteractionsCount);
+            updateGrowthStats();
+
+            // Construct the prompt for the AI
+            let prompt = message;
+            if (isDigitalTwin && digitalTwinPersona) {
+                prompt = `Act as if you are a past/future version of me, described as: "${digitalTwinPersona}". Your responses should always reflect this persona. Respond to the following message: "${message}"`;
+            } else {
+                prompt = `You are EchoWhisper, an empathetic AI. Your current personality is set to "${selectedPersonality}". The user's detected mood is "${detectedMood}". Keep your responses concise and supportive. Respond to the following: "${message}"`;
+            }
+
+            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                removeLoadingBubble(loadingBubble); // Remove indicator before showing response
+
+                if (result.candidates && result.candidates[0]?.content?.parts?.[0]) {
+                    const aiText = result.candidates[0].content.parts[0].text;
+                    addMessage(aiText, 'ai', chatMessagesContainer);
+                } else {
+                    addMessage("I'm sorry, I couldn't generate a response right now. Please try again.", 'ai', chatMessagesContainer);
+                    console.error("Gemini API response structure unexpected:", result);
+                }
+            } catch (error) {
+                removeLoadingBubble(loadingBubble); // Also remove indicator on error
+                addMessage("I'm experiencing a technical issue. Please try again in a moment.", 'ai', chatMessagesContainer);
+                console.error("Error communicating with Gemini API:", error);
+            }
+        }
+
+
+        // --- Event Listeners and Initializations ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Daily Active Status Check ---
+            const today = new Date().toISOString().slice(0, 10);
+            if (lastActiveDate !== today) {
+                daysActiveCount++;
+                localStorage.setItem('echoDaysActive', daysActiveCount);
+                localStorage.setItem('echoLastActiveDate', today);
+            }
+
+            // --- Scroll Animation Logic ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        if (entry.target.id === 'moodTrendChart') renderMoodChart(true);
+                        if (entry.target.classList.contains('audience-grid') || entry.target.classList.contains('reward-grid')) {
+                            entry.target.querySelectorAll('.audience-card, .reward-card').forEach(card => card.classList.add('is-visible'));
+                        }
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
+            
+            document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+
+            // --- Chat Interfaces Logic ---
+            const setupChatInterface = (inputId, buttonId, messagesId, isTwinFeature) => {
+                const input = document.getElementById(inputId);
+                const button = document.getElementById(buttonId);
+                const messages = document.getElementById(messagesId);
+                const sendMessage = () => {
+                    const message = input.value.trim();
+                    if (message) {
+                        sendMessageToGemini(message, messages, isTwinFeature ? isTwinActive : false);
+                        input.value = '';
+                    }
+                };
+                button.addEventListener('click', sendMessage);
+                input.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+            };
+            setupChatInterface('mainChatInput', 'mainChatSendButton', 'mainChatMessages', true);
+            setupChatInterface('featureChatInput', 'featureChatSendButton', 'featureChatMessages', false);
+
+
+            // --- AI Personality Modes Logic ---
+            const personalityCards = document.querySelectorAll('.personality-card');
+            const selectedPersonalityInfo = document.getElementById('selectedPersonalityInfo');
+            personalityCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    personalityCards.forEach(p => p.classList.remove('active'));
+                    card.classList.add('active');
+                    selectedPersonality = card.dataset.personality;
+                    selectedPersonalityInfo.textContent = `Currently selected: ${selectedPersonality}`;
+                });
+            });
+
+            // --- Mood Detection Simulation Logic ---
+            const moodInput = document.getElementById('moodInput');
+            const currentMoodSpan = document.getElementById('currentMood');
+            const moodEmojiSpan = document.getElementById('moodEmoji');
+            const moodMap = { 'sad': {m:'Sad',e:'😔'},'unhappy':{m:'Sad',e:'😔'},'down':{m:'Sad',e:'😔'},'happy':{m:'Happy',e:'😊'},'joy':{m:'Happy',e:'😊'},'excited':{m:'Happy',e:'😊'},'anxious':{m:'Anxious',e:'😟'},'stressed':{m:'Anxious',e:'😟'},'angry':{m:'Angry',e:'😠'},'calm':{m:'Calm',e:'😌'},'lonely':{m:'Lonely',e:'😥'},'confused':{m:'Confused',e:'🤔'},'tired':{m:'Tired',e:'😴'},'energized':{m:'Energized',e:'⚡'}};
+
+            moodInput.addEventListener('input', () => {
+                const text = moodInput.value.toLowerCase();
+                let foundMood = Object.keys(moodMap).find(key => text.includes(key));
+                detectedMood = foundMood ? moodMap[foundMood].m : 'Neutral';
+                let emoji = foundMood ? moodMap[foundMood].e : (text.length > 0 ? '😐' : '');
+                
+                currentMoodSpan.textContent = detectedMood;
+                moodEmojiSpan.textContent = emoji;
+                updateMoodHistory(detectedMood, emoji);
+            });
+
+            // --- Digital Twin Mode Logic ---
+            const twinPersonaInput = document.getElementById('twinPersonaInput');
+            const activateTwinButton = document.getElementById('activateTwinButton');
+            const twinResponseArea = document.getElementById('twinResponseArea');
+            const mainChatInput = document.getElementById('mainChatInput');
+            const mainChatMessages = document.getElementById('mainChatMessages');
+
+            activateTwinButton.addEventListener('click', () => {
+                const persona = twinPersonaInput.value.trim();
+                isTwinActive = !!persona;
+                digitalTwinPersona = persona;
+                twinResponseArea.style.opacity = 1;
+
+                if (isTwinActive) {
+                    twinResponseArea.textContent = `Digital Twin activated! You are now conversing with: "${persona}". Type your message in the main chat.`;
+                    mainChatMessages.innerHTML = `<div class="chat-bubble ai-message-bubble">Digital Twin Mode activated. You are conversing as: "${persona}". What would you like to discuss with your twin?</div>`;
+                    mainChatInput.placeholder = "Talk to your Digital Twin...";
+                } else {
+                    twinResponseArea.textContent = "Please describe a persona to activate Digital Twin mode.";
+                    mainChatInput.placeholder = "Type your message...";
+                }
+            });
+            
+            // --- Well-being Hub: Reflections Logic ---
+            const reflectionInput = document.getElementById('reflectionInput');
+            const saveReflectionButton = document.getElementById('saveReflectionButton');
+            const reflectionEntriesDiv = document.getElementById('reflectionEntries');
+
+            function displayReflections() {
+                reflectionEntriesDiv.innerHTML = dailyReflections.length === 0 
+                    ? '<p style="color: #999;">No reflections saved yet.</p>'
+                    : dailyReflections.slice().reverse().map(entry => 
+                        `<div class="reflection-entry">
+                            <div class="entry-date">${entry.date}</div>
+                            <div class="entry-text">${entry.text}</div>
+                        </div>`
+                    ).join('');
+            }
+            saveReflectionButton.addEventListener('click', () => {
+                const text = reflectionInput.value.trim();
+                if (text) {
+                    dailyReflections.push({ date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), text });
+                    localStorage.setItem('echoReflections', JSON.stringify(dailyReflections));
+                    reflectionInput.value = '';
+                    displayReflections();
+                }
+            });
+
+            // --- Well-being Hub: Growth Journey Logic ---
+            const totalInteractionsSpan = document.getElementById('totalInteractions');
+            const daysActiveSpan = document.getElementById('daysActive');
+            const chartBarsContainer = document.getElementById('chartBars');
+            const chartLabelsContainer = document.getElementById('chartLabels');
+            const moodTrendChartElement = document.getElementById('moodTrendChart');
+            const moodValueMap = {'Sad':1,'Lonely':2,'Anxious':3,'Angry':4,'Neutral':5,'Tired':5,'Confused':5,'Calm':6,'Happy':7,'Energized':8};
+            const moodColorMap = {'Sad':'#8c3c7c','Lonely':'#6a4bff','Anxious':'#7a52e0','Angry':'#d32f2f','Neutral':'#4a4a6b','Tired':'#5f5f7a','Confused':'#7c7c99','Calm':'#4CAF50','Happy':'#FFD700','Energized':'#FFA500'};
+            
+            function updateGrowthStats() {
+                totalInteractionsSpan.textContent = totalInteractionsCount;
+                daysActiveSpan.textContent = daysActiveCount;
+            }
+            
+            function updateMoodHistory(mood, emoji) {
+                const today = new Date().toISOString().slice(0, 10);
+                const existingEntryIndex = moodHistory.findIndex(entry => entry.date === today);
+                if(emoji === '') return; // Don't log empty moods
+                if (existingEntryIndex > -1) moodHistory[existingEntryIndex] = { date: today, mood, emoji };
+                else moodHistory.push({ date: today, mood, emoji });
+                
+                moodHistory = moodHistory.slice(-7); // Keep last 7 days
+                localStorage.setItem('echoMoodHistory', JSON.stringify(moodHistory));
+                
+                if (moodTrendChartElement.classList.contains('is-visible')) renderMoodChart(true);
+            }
+            
+            function renderMoodChart(animate = false) {
+                chartBarsContainer.innerHTML = '';
+                chartLabelsContainer.innerHTML = '';
+                const last7Days = [...Array(7)].map((_, i) => {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    return d.toISOString().slice(0, 10);
+                }).reverse();
+
+                last7Days.forEach(dateStr => {
+                    const entry = moodHistory.find(h => h.date === dateStr);
+                    const mood = entry?.mood || 'Neutral';
+                    const emoji = entry?.emoji || '😐';
+                    const height = ((moodValueMap[mood] || 3) / 8) * 100;
+                    const color = moodColorMap[mood] || '#4a4a6b';
+                    
+                    chartBarsContainer.innerHTML += `<div class="chart-bar-container"><div class="chart-bar" style="background-color: ${color}; height:${animate ? 0 : height}%;" data-height="${height}"><span class="mood-icon">${emoji}</span></div></div>`;
+                    chartLabelsContainer.innerHTML += `<div>${new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>`;
+                });
+                if(animate) {
+                    setTimeout(() => {
+                        document.querySelectorAll('.chart-bar').forEach(bar => {
+                            bar.style.height = `${bar.dataset.height}%`;
+                        });
+                    }, 50);
+                }
+            }
+
+            // --- Well-being Hub: Daily Echo Logic ---
+            const echoBox = document.getElementById('echoBox');
+            const getDailyEchoButton = document.getElementById('getDailyEchoButton');
+            getDailyEchoButton.addEventListener('click', async () => {
+                addDirectLoading(echoBox);
+                const prompt = `Generate a concise, personalized positive affirmation or a thought-provoking reflection question. The user's preferred AI personality is "${selectedPersonality}" and their recent mood is "${detectedMood}". Keep it to one or two sentences.`;
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    const result = await response.json();
+                    echoBox.textContent = result.candidates?.[0]?.content?.parts?.[0]?.text || "Could not generate a daily echo. Please try again.";
+                } catch (error) {
+                    echoBox.textContent = "Failed to fetch daily echo. Please check your connection.";
+                    console.error("Error fetching daily echo:", error);
+                }
+            });
+
+            // Initial Page Load Functions
+            displayReflections();
+            updateGrowthStats();
+            renderMoodChart(false);
+        });
+    </script>
+</body>
+</html>
